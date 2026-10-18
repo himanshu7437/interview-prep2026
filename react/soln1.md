@@ -67,17 +67,77 @@ React.memo is a higher-order component that memoizes a function component's rend
 It is useful when a component renders frequently with unchanged props and its rendering is expensive. It does not prevent re-renders caused by the component's own state or consumed context changes.
 
 11. Explain Context API and how to integrate it ***
+
+The Context API allows a parent component to provide data to descendant components without explicitly passing props through every intermediate component. It is useful for relatively stable, shared values such as themes, locale, and authentication information.
+
 12. What is prop drilling and how to avoid it ***
+
+Prop drilling occurs when data is passed through multiple intermediate components that do not themselves need the data, simply to reach a deeply nested component.
+It can be addressed using Context API, component composition, custom hooks built on shared state, or state-management libraries such as Redux Toolkit and Zustand.
+
+
 13. When and how to use lazy loading ***
+
+Lazy loading means loading a resource only when it is needed rather than including everything in the initial load. In React, lazy and Suspense are commonly used to load components on demand, reducing the initial JavaScript bundle size.
+
+
 14. What is Virtual DOM ***
+
+The Virtual DOM is a conceptual representation of the UI maintained by React. React uses its rendering process to determine what changes are needed, then commits the necessary updates to the actual DOM.
+The goal is to let developers describe the desired UI declaratively rather than manually manipulating DOM elements for every state change.
+
+
+
 15. What is reconciliation in React (how React updates DOM) ***
+
+Reconciliation is the process React uses to compare the new rendered element tree with the previous one and determine the changes needed to update the UI. React uses element types, tree position, and keys to determine which components and elements can be reused and which must be replaced.
+
+
 16. How to route between pages in React **
+
+In a client-rendered React application, we commonly use React Router to map URL paths to components. It allows navigation without a full-page reload and supports nested routes, route parameters, and navigation APIs.
+
+
 17. What are error boundaries in React ***
+
+Error boundaries are React components that catch errors thrown during rendering and certain lifecycle operations in their descendant component tree. They allow the application to show fallback UI instead of letting a rendering error crash the entire affected tree.
+Traditional error boundaries use class components with getDerivedStateFromError and optionally componentDidCatch.
+
+
 18. What are controlled and uncontrolled components ***
+
+In a controlled form input, React state is the source of truth for the input's value. In an uncontrolled input, the DOM manages the current value, which can be accessed using a ref or form APIs.
+
 19. What are keys in lists and why are they important ***
+
+Keys are special identifiers that help React match list elements between renders. They allow React to recognize which items were added, removed, moved, or updated.
+Keys should be stable and unique among siblings. Database IDs are usually preferable to array indexes, particularly when items can be inserted, deleted, or reordered.
+
 20. What is React Fragment and why is it used **
+
+A Fragment lets a component return multiple sibling elements without adding an unnecessary DOM wrapper. It keeps the DOM structure cleaner and avoids introducing extra elements that could affect layout or semantics.
+
+
 21. What are higher-order components (HOCs) **
+
+A Higher-Order Component is a function that takes a component and returns a new component with additional behavior. HOCs were commonly used for cross-cutting concerns such as authentication, logging, and permissions before hooks became widely adopted.
+
+
 22. What are lifecycle methods (mount/update/unmount) in class components **
+
+Lifecycle methods allow class components to run code at specific stages of their existence: mounting, updating, and unmounting. They are useful for initializing external resources, responding to changes, and cleaning up subscriptions or timers.
+
 23. What is Redux and Redux Toolkit? How do you create a store? ***
+
+Redux is a predictable state-management library that stores shared application state in a centralized store. Components dispatch actions, reducers calculate the next state, and subscribed components receive updates.
+Redux Toolkit (RTK) is the recommended approach for writing Redux applications. It reduces boilerplate and provides utilities such as configureStore and createSlice. Redux Toolkit uses Immer to let reducers express immutable updates with mutation-like syntax.
+
 24. How to structure a React application folder **
+
+I would choose a structure based on application size and team needs. For a small application, a simple component-based structure is sufficient. For a large MERN application, I prefer a feature-based structure that groups components, hooks, API services, and state management by business domain.
+
+
 25. How will you handle authentication in frontend and where to store the token ***
+
+In a MERN application, the frontend sends login credentials to the backend over HTTPS. The backend validates the credentials and establishes an authenticated session or issues tokens. The frontend then uses the authentication mechanism for protected API requests, while the backend validates every protected request and enforces authorization.
+For browser applications, a common secure approach is to use a server-managed session or JWT stored in a Secure, HttpOnly, appropriately configured SameSite cookie. Because JavaScript cannot read an HttpOnly cookie, it reduces the risk of token theft through client-side JavaScript. Cookie-based authentication still requires appropriate CSRF protection.
