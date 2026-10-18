@@ -399,14 +399,375 @@
 
 // 15. Explain polyfills ***
 
+// A polyfill is code that provides a feature or API in an environment where that feature is not natively available. It allows developers to use a consistent interface across supported environments.
+
+// let arr = [1, 2, 4, 5];
+// console.log(arr.includes(3));
+
+// if(!Array.prototype.myIncludes){
+//     Array.prototype.myIncludes = function (value) {
+//         return this.indexOf(value) !== -1;
+//     }
+// }
+
+// console.log(arr.myIncludes(3));
+
 
 // 16. Create polyfill for Promise.all, Promise.allsettled, map method, filter, includes, hasOwnProperty, find ***
+
+// promise.all
+
+// function myPromiseAll(promises) {
+//   return new Promise((resolve, reject) => {
+//     const results = [];
+//     let completed = 0;
+
+//     if (promises.length === 0) {
+//       resolve(results);
+//       return;
+//     }
+
+//     promises.forEach((promise, index) => {
+//       Promise.resolve(promise)
+//         .then((value) => {
+//           results[index] = value;
+//           completed++;
+
+//           if (completed === promises.length) {
+//             resolve(results);
+//           }
+//         })
+//         .catch((error) => {
+//           reject(error);
+//         });
+//     });
+//   });
+// }
+
+// // Testing
+// const p1 = Promise.resolve(10);
+// const p2 = Promise.resolve(20);
+// const p3 = Promise.resolve(30);
+
+// myPromiseAll([p1, p2, p3])
+//   .then((result) => console.log(result))
+//   .catch((error) => console.log(error));
+
+// Output: [10, 20, 30]
+
+// promise.allsetlled
+
+// function myPromiseAllSettled(iterable) {
+//   return Promise.all(
+//     Array.from(iterable, item =>
+//       Promise.resolve(item).then(
+//         value => ({
+//           status: "fulfilled",
+//           value
+//         }),
+//         reason => ({
+//           status: "rejected",
+//           reason
+//         })
+//       )
+//     )
+//   );
+// }
+
+
+// promise.map
+// Array.prototype.myMap = function (callback, thisArg) {
+//   if (this == null) {
+//     throw new TypeError("Array is null or undefined");
+//   }
+
+//   if (typeof callback !== "function") {
+//     throw new TypeError("Callback must be a function");
+//   }
+
+//   const array = Object(this);
+//   const length = array.length >>> 0;
+//   const result = new Array(length);
+
+//   for (let i = 0; i < length; i++) {
+//     if (i in array) {
+//       result[i] = callback.call(thisArg, array[i], i, array);
+//     }
+//   }
+
+//   return result;
+// };
+
+// promise.filter 
+
+// Array.prototype.myFilter = function (callback, thisArg) {
+//   if (this == null) {
+//     throw new TypeError("Array is null or undefined");
+//   }
+
+//   if (typeof callback !== "function") {
+//     throw new TypeError("Callback must be a function");
+//   }
+
+//   const array = Object(this);
+//   const length = array.length >>> 0;
+//   const result = [];
+
+//   for (let i = 0; i < length; i++) {
+//     if (i in array) {
+//       const value = array[i];
+
+//       if (callback.call(thisArg, value, i, array)) {
+//         result.push(value);
+//       }
+//     }
+//   }
+
+//   return result;
+// };
+
+// includes
+
+// Array.prototype.myIncludes = function (searchElement, fromIndex = 0) {
+//   if (this == null) {
+//     throw new TypeError("Array is null or undefined");
+//   }
+
+//   const array = Object(this);
+//   const length = array.length >>> 0;
+
+//   if (length === 0) return false;
+
+//   let start = Number(fromIndex);
+
+//   if (Number.isNaN(start)) start = 0;
+
+//   start = Math.trunc(start);
+
+//   if (start >= length) return false;
+
+//   let index = start >= 0 ? start : Math.max(length + start, 0);
+
+//   for (; index < length; index++) {
+//     if (
+//       array[index] === searchElement ||
+//       (Number.isNaN(array[index]) && Number.isNaN(searchElement))
+//     ) {
+//       return true;
+//     }
+//   }
+
+//   return false;
+// };
+
+
+// has own property 
+// function myHasOwnProperty(object, property) {
+//   if (object == null) {
+//     throw new TypeError("Cannot convert null or undefined");
+//   }
+
+//   return Object.prototype.hasOwnProperty.call(
+//     Object(object),
+//     property
+//   );
+// }
+
+
+//find 
+
+// Array.prototype.myFind = function (callback, thisArg) {
+//   if (this == null) {
+//     throw new TypeError("Array is null or undefined");
+//   }
+
+//   if (typeof callback !== "function") {
+//     throw new TypeError("Callback must be a function");
+//   }
+
+//   const array = Object(this);
+//   const length = array.length >>> 0;
+
+//   for (let i = 0; i < length; i++) {
+//     const value = array[i];
+
+//     if (callback.call(thisArg, value, i, array)) {
+//       return value;
+//     }
+//   }
+
+//   return undefined;
+// };
+
+
 // 17. Create a custom function for setInterval ***
+
+// function mySetInterval(callback, delay, ...args){
+//     let active = true;
+//     let timerId;
+
+//     function run(){
+//         if(!active) return;
+
+//         callback(...args);
+
+//         if(active){
+//             timerId = setTimeout(run, delay);
+//         }
+//     }
+
+//     timerId = setTimeout(run, delay);
+
+//     return function cancel (){
+//         active = false;
+//         clearTimeout(timerId);
+//     }
+// }
+
+// const cancel = mySetInterval(() => {
+//     console.log("hiii");
+// }, 1000)
+
+// setTimeout(() => {
+//     cancel();
+// }, 5000)
+
+
 // 18. What is a Variable Scope in JavaScript ***
+
+// Scope determines where a variable or binding can be accessed in JavaScript.
+
+// var globalVar = "Global";
+
+// function example() {
+//   var functionVar = "Function";
+
+//   if (true) {
+//     let blockVar = "Block";
+//     console.log(functionVar); // Function
+//     console.log(blockVar);    // Block
+//   }
+
+//   console.log(functionVar); // Function
+//   console.log(blockVar);    // ReferenceError
+// }
+
+// example();
+// console.log(globalVar); // Global
+
+// 1, var - function scope
+// 2, let, const - block scope
+
+// for (let i = 0; i < 3; i++) {
+//     setTimeout(() => {
+//         console.log(i);
+//     }, 1000);
+// }
+
+
 // 19. Explain event delegation, event propogation, event bubbling, event capturing ***
+
+// Event propagation is the process by which a DOM event travels through relevant elements.
+// - Capturing phase: the event travels from the outer ancestors toward the target.
+// - Target phase: the event reaches the target element.
+// - Bubbling phase: the event travels back up through ancestors, for events that bubble.
+// Event delegation is a technique where a listener is placed on a common ancestor and handles events originating from matching descendants. It commonly uses bubbling.
+
+
 // 20. Explain closure with example ***
+
+// function createBankAccount(initialBalance) {
+//   let balance = initialBalance;
+
+//   return {
+//     deposit(amount) {
+//       balance += amount;
+//       return balance;
+//     },
+
+//     getBalance() {
+//       return balance;
+//     }
+//   };
+// }
+
+// const account = createBankAccount(100);
+
+// account.deposit(50);
+// console.log(account.getBalance()); // 150
+// console.log(account.balance);      // undefined
+
 // 21. Explain constructor function **
+
+// function User(name, age) {
+//   this.name = name;
+//   this.age = age;
+// }
+
+// User.prototype.greet = function () {
+//   return `Hi, I am ${this.name}`;
+// };
+
+// const user1 = new User("Aman", 25);
+// const user2 = new User("Priya", 23);
+
+// console.log(user1.greet()); // Hi, I am Aman
+// console.log(user2.greet()); // Hi, I am Priya
+
+
 // 22. Explain class in javascript **
+
+// class User {
+//   constructor(name) {
+//     this.name = name;
+//   }
+
+//   greet() {
+//     return `Hello, ${this.name}`;
+//   }
+
+//   static describe() {
+//     return "A user account";
+//   }
+// }
+
+// const user = new User("Himanshu");
+
+// console.log(user.greet());      // Hello, Himanshu
+// console.log(User.describe());   // A user account
+
 // 23. Explain oops concept with example and real time scenrios ***
+
+// 1 inheritance
+// 2. incapsulation
+// 3. abstraction 
+// 4. polymorhism
+
+
 // 24. Explain execution context and call stack ***
+
+// An execution context is the environment in which JavaScript code is evaluated. It contains information required to execute the code, including its lexical environment, variable bindings, and relevant execution state.
+// The call stack is the last-in, first-out (LIFO) structure that tracks the active execution contexts and function calls.
+// JavaScript creates a global execution context for the program and creates function execution contexts when functions are invoked. Modules and other execution environments have additional details, but this model is sufficient for many interviews.
+
+
 // 25. What is lexical scope and how js resolves variables lookups ***
+
+// lexical scope - Lexical scope means that the accessibility of variables is determined by where functions and blocks are written in the source code, rather than by where functions are called.
+
+// const name = "Global";
+
+// function outer() {
+//   const name = "Outer";
+
+//   function inner() {
+//     const message = "Hello";
+
+//     console.log(message);
+//     console.log(name);
+//   }
+
+//   inner();
+// }
+
+// outer();
