@@ -37,10 +37,35 @@ Hooks are functions provided by React that allow functional components to use fe
 
 8. Explain useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef ***
 
+useState — component state
+Stores a value between renders. Updating it schedules a re-render.
 
+useEffect — synchronize with external systems
+Used for API requests, subscriptions, timers, and other external synchronization.
+
+useLayoutEffect — layout-sensitive work
+Runs after DOM changes are committed but before the browser repaints. Useful for measuring an element and synchronously adjusting layout.
+
+useMemo — memoize a calculated value
+Reuses a calculation result while its dependencies remain unchanged.
+
+useCallback — memoize a function reference
+Returns the same function reference while dependencies remain unchanged.
+
+useRef — persist a mutable reference
+Stores a value between renders without triggering a re-render when .current changes. Often used for DOM access and timer IDs.
 
 9. What are custom hooks and when to use them ***
+
+A custom hook is a JavaScript function whose name starts with use and that can call other React hooks. It allows us to extract and reuse stateful logic across components without duplicating code.
+Custom hooks share logic, not automatically the same state instance. Each component calling a custom hook generally has its own independent state unless the hook uses shared state elsewhere.
+
+
 10. Explain React.memo and how it helps in optimization ***
+
+React.memo is a higher-order component that memoizes a function component's rendered result. React can skip rendering that component when its props are unchanged according to a shallow comparison using Object.is for individual prop values.
+It is useful when a component renders frequently with unchanged props and its rendering is expensive. It does not prevent re-renders caused by the component's own state or consumed context changes.
+
 11. Explain Context API and how to integrate it ***
 12. What is prop drilling and how to avoid it ***
 13. When and how to use lazy loading ***
