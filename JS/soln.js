@@ -771,3 +771,537 @@
 // }
 
 // outer();
+
+// 26. Explain is 'this' keyword in javascript ***
+
+// The this keyword refers to a value determined by how a function is called, except in arrow functions, which inherit this from their surrounding lexical environment.
+
+// In ordinary functions, this depends primarily on the call site, not on where the function was defined.
+
+// 1. this --> global scope --> window (browser), {} --> Node.js
+// 2. this  --> objects --> khud ki properties ko direct;
+// 3. this --> function --> how it is called;
+
+// let user = {
+//     name : "himanshu"
+// }
+
+// function greet(){
+//     console.log(this.name);
+// }
+
+// greet();
+
+// // call, apply, bind
+
+// // call --> 
+// greet.call(user, a, b, c);
+
+// // apply -->
+// greet.apply(user, [a, b, c])
+
+// // bind -->
+// let ourfnc = greet.bind(user, a, b, c);
+
+// ourfnc();
+3. 
+// 27. What is prototype inheritence and how proto and prototype works (Expected : __proto__ vs prototype, how object lookup works, how classes use prototype under the hood) **
+
+// prototype inheritance -->
+// JavaScript uses prototype-based inheritance. An object can inherit properties and methods from another object through its internal [[Prototype]] link.
+// When a property is accessed, JavaScript first checks the object itself. If the property is not found, it searches the object's prototype, then the prototype's prototype, continuing until the property is found or the chain ends at null.
+
+// __proto__
+// prototype
+
+// how to create methods using prototype
+
+// Parent constructor
+// function Animal(name, sound) {
+//     this.name = name;
+//     this.sound = sound;
+// }
+
+// // Parent prototype method
+// Animal.prototype.speak = function () {
+//     console.log(`${this.name} says ${this.sound}`);
+// };
+
+// Animal.prototype.eat = function () {
+//     console.log(`${this.name} is eating`);
+// };
+
+// // Child constructor
+// function Dog(name, sound, breed) {
+//     Animal.call(this, name, sound); // Initialize parent properties
+//     this.breed = breed;
+// }
+
+// // Inherit Animal's prototype methods
+// Dog.prototype = Object.create(Animal.prototype);
+
+// // Restore the correct constructor reference
+// Dog.prototype.constructor = Dog;
+
+// // Add a method specific to Dog
+// Dog.prototype.bark = function () {
+//     console.log(`${this.name} is barking!`);
+// };
+
+// // Create a Dog object
+// const dog = new Dog("Tommy", "Woof", "Labrador");
+
+// dog.speak(); // Tommy says Woof
+// dog.eat();   // Tommy is eating
+// dog.bark();  // Tommy is barking!
+
+
+// classes 
+// class Animal {
+//   speak() {
+//     return "Sound";
+//   }
+// }
+
+// class Dog extends Animal {
+//   bark() {
+//     return "Woof";
+//   }
+// }
+
+// const dog = new Dog();
+
+// console.log(dog.bark()); // Woof
+// console.log(dog.speak()); // Sound
+
+// console.log(Object.getPrototypeOf(dog) === Dog.prototype); // true
+// console.log(Object.getPrototypeOf(Dog.prototype) === Animal.prototype); // true
+
+// 28. What shadowing and illegal shadowing **
+
+
+// Variable shadowing occurs when a declaration in an inner scope uses the same name as a declaration in an outer scope. Within the inner scope, the inner binding takes precedence.
+
+// let name = "Global";
+
+// function showName() {
+//   let name = "Local";
+//   console.log(name);
+// }
+
+// showName();       // Local
+// console.log(name); // Global
+    
+// Illegal shadowing is an informal term commonly used for cases where a lexical declaration such as let or const conflicts with a var declaration in a scope where JavaScript
+
+// let age = 25;
+
+// {
+//   var age = 30; // SyntaxError
+// }
+
+// 29. Explain currying ***
+
+// Currying is a technique in which a function that takes multiple arguments is transformed into a sequence of functions, each taking one argument at a time.
+// For example, a function \(f(a,b,c)\) can be represented as \(f(a)(b)(c)\).
+
+// function add(a) {
+//   return function (b) {
+//     return function (c) {
+//       return a + b + c;
+//     };
+//   };
+// }
+
+// console.log(add(2)(3)(4)); // 9
+
+// const multiply = a => b => a * b;
+
+// const double = multiply(2);
+// const triple = multiply(3);
+
+// console.log(double(10)); // 20
+// console.log(triple(10)); // 30
+
+// 30. Difference between shallow copy and deep copy ***
+
+
+// A shallow copy creates a new outer object but retains references to nested objects. A deep copy creates an independent copy of nested data as well, to the extent defined by the copying method.
+
+// shallow copy --> 
+// spread operator
+// const arr = [1, 2, 3, 5];
+// const arr2= [...arr];
+
+// arr2.push(6);
+// console.log(arr);
+
+
+// const original = {
+//   name: "Himanshu",
+//   address: {
+//     city: "Bahadurgarh"
+//   }
+// };
+
+// const copy = { ...original };
+
+// copy.name = "Aman";
+// copy.address.city = "Delhi";
+
+// console.log(original.name);         // Himanshu
+// console.log(original.address.city); // Delhi
+
+// deep copy -->
+
+// const original = {
+//   name: "Himanshu",
+//   address: {
+//     city: "Bahadurgarh"
+//   }
+// };
+
+// const copy = structuredClone(original);
+
+// copy.address.city = "Delhi";
+
+// console.log(original.address.city); // Bahadurgarh
+// console.log(copy.address.city);     // Delhi
+
+// stringify
+
+// const original = {
+//   name: "Himanshu",
+//   address: {
+//     city: "Bahadurgarh"
+//   }
+// };
+
+// const copy = JSON.parse(JSON.stringify(original));
+
+// copy.address.city = "Delhi";
+
+// console.log(original.address.city); // Bahadurgarh
+// console.log(copy.address.city);     // Delhi
+
+
+// 31. What is a generator function **
+
+// A generator function is a special function declared using function* that can pause execution using yield and resume later. Calling it returns a generator object, which follows the iterator protocol.
+
+// function* numbers() {
+//   yield 1;
+//   yield 2;
+//   yield 3;
+// }
+
+// const iterator = numbers();
+
+// console.log(iterator.next()); // { value: 1, done: false }
+// console.log(iterator.next()); // { value: 2, done: false }
+// console.log(iterator.next()); // { value: 3, done: false }
+// console.log(iterator.next()); // { value: undefined, done: true }
+
+// 32. What is memoization? Imlement memoize function ***
+
+// Memoization is an optimization technique in which a function caches the results of previous computations so that repeated calls with equivalent inputs can return a stored result instead of recomputing it.
+// It is most useful for expensive, repeatable computations where the same inputs occur frequently.
+
+// function memoize(fn) {
+//   const cache = new Map();
+
+//   return function (...args) {
+//     if (cache.has(args[0])) {
+//       return cache.get(args[0]);
+//     }
+
+//     const result = fn.apply(this, args);
+//     cache.set(args[0], result);
+
+//     return result;
+//   };
+// }
+
+// function square(n) {
+//   console.log("Calculating...");
+//   return n * n;
+// }
+
+// const memoizedSquare = memoize(square);
+
+// console.log(memoizedSquare(5)); // Calculates, then 25
+// console.log(memoizedSquare(5)); // Cached result: 25
+// console.log(memoizedSquare(6)); // Calculates, then 36
+
+// 33. Explain set with example and explain answer of this set.add([1]), set.add([1]) ***
+
+// set --> unique elements
+
+// const set = new Set();
+
+// set.add(1);
+// set.add(1);
+// set.add("1");
+
+// console.log(set.size); // 2
+// console.log(set);      // Set { 1, "1" }
+
+
+// set.add([1]);
+// set.add([1]);
+// set.size(); // 2
+
+// if you add the same array reference twice, it is stored only once:
+
+// 34. Explain Object.defineProperty() (with get/set) **
+
+// Object.defineProperty() defines or modifies an individual property on an object using a property descriptor. It allows you to configure characteristics such as whether a property is writable, enumerable, or configurable, or define getter and setter functions that run when the property is accessed or assigned. 
+
+// const user = {};
+
+// Object.defineProperty(user, "name", {
+//   value: "Himanshu",
+//   writable: false,
+//   enumerable: true,
+//   configurable: false
+
+// });
+
+// const user = {
+//   firstName: "Himanshu",
+//   lastName: "Sharma"
+// };
+
+// Object.defineProperty(user, "fullName", {
+//   get() {
+//     return `${this.firstName} ${this.lastName}`;
+//   },
+
+//   set(value) {
+//     const parts = value.split(" ");
+
+//     this.firstName = parts[0];
+//     this.lastName = parts.slice(1).join(" ");
+//   },
+
+//   enumerable: true,
+//   configurable: true
+// });
+
+// console.log(user.fullName); // Himanshu Sharma
+
+// user.fullName = "Aman Kumar";
+// console.log(user.firstName); // Aman
+
+
+// 35. Explain optional chaining & Nullish Coalescing **
+
+// // Optional chaining (?.) safely accesses a property, calls a method, or accesses an indexed element when the value immediately to its left is null or undefined. Instead of throwing a TypeError, it returns undefined.
+
+// const user = {
+//   profile: {
+//     name: "Himanshu"
+//   }
+// };
+
+// console.log(user.profile?.name); // Himanshu
+// console.log(user.address?.city); // undefined
+
+
+// // Nullish coalescing (??) provides a fallback value only when the expression on the left is null or undefined.
+
+// const username = null;
+// const displayName = username ?? "Guest";
+
+// console.log(displayName); // Guest
+
+
+// // The || operator checks whether the left side is falsy. The ?? operator checks specifically for null or undefined.
+
+// console.log(0 || 100);  // 100
+// console.log(0 ?? 100);  // 0
+
+// console.log("" || "Default"); // Default
+// console.log("" ?? "Default"); // ""
+
+
+// 36. Explain call, bind, apply ***
+
+
+// call(), apply(), and bind() are function methods that allow you to control the this value used by an ordinary function.
+// - call() invokes the function immediately, passing arguments individually.
+// - apply() invokes the function immediately, passing arguments as an array or array-like value.
+// - bind() returns a new bound function that can be called later with a specified this value and optional preset arguments.
+
+
+// function introduce(city, country) {
+//   console.log(
+//     `${this.name} lives in ${city}, ${country}`
+//   );
+// }
+
+// const user = { name: "Himanshu" };
+
+// introduce.call(user, "Delhi", "India");
+
+// introduce.apply(user, ["Delhi", "India"]);
+
+// const boundIntroduce = introduce.bind(user, "Delhi");
+
+// boundIntroduce("India");
+
+// 37. Difference b/w map, filter and reduce ***
+
+// These are array iteration methods that serve different purposes:
+// - map() transforms each existing element and returns a new array.
+// - filter() returns a new array containing elements that pass a condition.
+// - reduce() processes elements to accumulate a single result, which can be a number, object, array, or another value.
+
+
+// const numbers = [1, 2, 3, 4, 5];
+
+// const doubled = numbers.map(n => n * 2);
+// const even = numbers.filter(n => n % 2 === 0);
+// const sum = numbers.reduce((total, n) => total + n, 0);
+
+// console.log(doubled); // [2, 4, 6, 8, 10]
+// console.log(even);    // [2, 4]
+// console.log(sum);     // 15
+
+// 38. How does garbage collection work in js ***
+
+// Garbage collection is the automatic process through which the JavaScript engine identifies memory that is no longer reachable by the program and reclaims it.
+// Modern JavaScript engines commonly use reachability-based algorithms, including mark-and-sweep techniques, alongside generational and other optimizations. The exact implementation varies by engine.
+
+// function createUser() {
+//   const user = {
+//     name: "Himanshu",
+//     data: new Array(1000).fill("data")
+//   };
+
+//   return user.name;
+// }
+
+// createUser();
+
+// 39. Difference between normal function and arrow function ***
+
+
+// A normal function is a function declaration or expression with its own function execution behavior, including a dynamically determined this value and, in ordinary functions, an arguments object.
+// An arrow function is a more concise function expression that captures this and arguments lexically, does not have its own prototype, and cannot be called as a constructor with new.
+
+// const user = {
+//   name: "Himanshu",
+
+//   normal() {
+//     return this.name;
+//   },
+
+//   arrow: () => {
+//     return this.name;
+//   }
+// };
+
+// console.log(user.normal()); // Himanshu
+// console.log(user.arrow());  // Depends on the surrounding lexical this
+
+// Arrow functions in callbacks
+
+// const user = {
+//   name: "Himanshu",
+
+//   delayedGreeting() {
+//     setTimeout(() => {
+//       console.log(this.name);
+//     }, 100);
+//   }
+// };
+
+// user.delayedGreeting(); // Himanshu
+
+// 40. What is reflow and repaint (DOM) ***
+
+// Reflow, also called layout in modern browser terminology, occurs when the browser recalculates the size or position of elements in the layout.
+// Repaint occurs when the browser redraws the visual appearance of elements without necessarily recalculating their layout.
+// A layout change may require both layout recalculation and repainting. A purely visual change may require repainting without reflow.
+
+// const box = document.querySelector(".box");
+
+// // May trigger layout recalculation and repaint
+// box.style.width = "300px";
+
+// // Usually requires repainting, but not layout
+// box.style.backgroundColor = "red";
+
+// 41. What is document fragment (DOM) ***
+
+// A DocumentFragment is a lightweight container for DOM nodes that is not itself part of the document tree. You can build a group of nodes inside it and then insert those nodes into the document.
+// When a fragment is inserted, its children are moved into the destination; the fragment itself is not inserted as a persistent wrapper.
+
+// const list = document.querySelector("#list");
+// const fragment = document.createDocumentFragment();
+
+// for (let i = 1; i <= 3; i++) {
+//   const item = document.createElement("li");
+//   item.textContent = `Item ${i}`;
+
+//   fragment.appendChild(item);
+// }
+
+// list.appendChild(fragment);
+
+// const list = document.querySelector("#list");
+// const fragment = document.createDocumentFragment();
+
+// for (let i = 1; i <= 3; i++) {
+//   const item = document.createElement("li");
+//   item.textContent = `Item ${i}`;
+
+//   fragment.appendChild(item);
+// }
+
+// list.appendChild(fragment);
+
+// 42. Difference between innerHTML vs textContent (DOM) ***
+
+// innerHTML gets or sets the HTML markup inside an element. When setting it, the browser parses the supplied string as HTML and creates DOM nodes.
+// textContent gets or sets the text content of an element. When setting it, the supplied string is treated as text rather than parsed as HTML.
+
+
+// 43. What is DOM Tree? What are Nodes (DOM) ***
+
+// The Document Object Model (DOM) is a programming interface that represents an HTML document as a structured tree of objects. JavaScript can use the DOM to read and modify the document's content, structure, and attributes.
+// A node is a general term for an object in this tree. Common node types include document nodes, element nodes, text nodes, comments, and document fragments.
+
+// 44. What is event.stopPropogation(), event.stopImmediatePropagation(), event.preventDefault(). (DOM) ***
+
+// These methods control different aspects of DOM event handling:
+// - stopPropagation() prevents the event from continuing to propagate through the DOM.
+// - stopImmediatePropagation() stops propagation and prevents later listeners on the same event target from being invoked.
+// - preventDefault() prevents the browser's default action for a cancelable event, when the event is not in a context that disallows cancellation.
+
+
+// 45. Difference between target and currentTarget.(DOM) ***
+
+// event.target identifies the object where the event originally occurred, 
+// while event.currentTarget identifies the element whose event listener is currently executing.
+
+// 46. How browser renders a web page? (Critical Rendering Path) **
+
+// The Critical Rendering Path is the sequence of steps the browser takes to transform HTML, CSS, and JavaScript resources into pixels displayed on the screen.
+// A simplified rendering pipeline includes parsing HTML into the DOM, parsing CSS into the CSSOM, combining relevant structures into a render tree, calculating layout, painting visual content, and compositing layers for display.
+// JavaScript, images, fonts, and other resources can influence or delay these steps.
+
+// 47. Why is innerHTML unsafe? Explain XSS. (DOM) ***
+
+// Using innerHTML with untrusted input can introduce Cross-Site Scripting (XSS) vulnerabilities because the browser parses the supplied string as HTML and may create executable elements or event-handler attributes.
+// Cross-Site Scripting (XSS) is a security vulnerability in which an attacker causes malicious script to execute in another user's browser within the context of a vulnerable website.
+
+// const userInput = `
+//   <img src="invalid"
+//        onerror="alert('XSS')">
+// `;
+
+// document.querySelector("#output").innerHTML = userInput;
+
+// innerHTML treats the input as markup. textContent treats it as text.
